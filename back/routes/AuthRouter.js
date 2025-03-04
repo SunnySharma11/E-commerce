@@ -11,5 +11,6 @@ router.route('/products').get(otherControllers.Products)
 router.route('/quick-view/:id').get(otherControllers.ExtraDetails)
 router.route('/cart').get(cartControllers.CartItems)
 router.route('/cart/:id').delete(cartControllers.CartDelete)
+router.route('/cart/add').post(cartControllers.CartAdd)
 
 module.exports = router

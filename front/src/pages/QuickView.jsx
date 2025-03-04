@@ -12,6 +12,8 @@ export default function QuickView() {
   const [selectedColor, setSelectedColor] = useState(""); // Selected color
 const [selectedSize, setSelectedSize] = useState(""); // Selected size
 
+// **   m m imp  , details imgsrc = is a array so always store 1st image as main image
+
   useEffect(() => {
     const fetchDetails = async () => {
       try {
@@ -50,25 +52,36 @@ const [selectedSize, setSelectedSize] = useState(""); // Selected size
       toast.error("Please select color and size.");
       return;
     }
-  
-    try {
-      const response = await fetch("http://localhost:5000/cart", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: details.name,
-          price: details.price,
-          color: selectedColor,
-          size: selectedSize,
-          quant :quantity
-        }),
-      });
-  
-      if (response.ok) {
-        toast.success("Added to cart!");
-      } else {
-        toast.error("Failed to add to cart.");
-      }
+    if (!details || !details.name || !details.imgSrc?.[0]) {
+      toast.error("Product details are not available.");
+      return;
+    }
+    
+
+
+  try{
+    const response = await fetch("http://localhost:5000/cart/add", {  
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: details.name,
+        price: parseFloat(details.price.replace(/[^0-9.]/g, "")), // Convert price to a number
+        imgSrc: details.imgSrc[0],
+        color: selectedColor,
+        size: selectedSize,
+        quant: quantity,
+      }),
+    });
+    
+    const responseData = await response.json();
+    
+    if (response.ok) {
+      toast.success("Added to cart!");
+      navigate("/cart");
+    } else {
+      toast.error(`Failed to add to cart: ${responseData.error || "Unknown error"}`);
+    }
+    
     } catch (error) {
       toast.error("Error adding to cart.");
     }

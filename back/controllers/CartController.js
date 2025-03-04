@@ -33,5 +33,16 @@ const CartDelete = async (req, res) => {
     }
   };
   
+const CartAdd = async(req,res) =>{
+    try {
+        const newItem = new Cart(req.body);
+        await newItem.save();
+        res.status(201).json({ message: "Item added to cart" });
 
-module.exports = {CartItems , CartDelete}
+    } catch (error) {
+       res.status(500).json({error: "Error adding item to cart" })
+    }
+}
+
+
+module.exports = {CartItems , CartDelete ,CartAdd}
