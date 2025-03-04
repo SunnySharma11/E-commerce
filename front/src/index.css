@@ -1,0 +1,10 @@
+@import "tailwindcss" prefix(tw);
+
+* {
+  user-select: none; /* Prevents text selection */
+ 
+}
+
+html, body {
+  height: 100%;
+}

@@ -1,0 +1,19 @@
+.homemidbtn{
+    padding: 5px 15px;
+    display: none;
+   
+}
+.homemidhovereffect:hover .homemidbtn{
+    display: block;
+    
+}
+
+/* products page func */
+
+.hoverpebtn{
+    display: none;
+}
+
+.hoverdiv:hover .hoverpebtn{
+    display: block;
+}

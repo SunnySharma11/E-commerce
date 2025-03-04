@@ -1,0 +1,10 @@
+li > a{
+    text-decoration: none;
+    outline: none;
+}
+.btn{
+    font-size: 1.2rem;
+    border-radius: 1.6rem;
+    padding: 8px 32px 10px 32px;
+    
+}
