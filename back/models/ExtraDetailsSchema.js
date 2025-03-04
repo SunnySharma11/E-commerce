@@ -10,3 +10,5 @@ const ExtraDetailsSchema = new mongoose.Schema({
 
 
 module.exports = new mongoose.model('ExtraDetails',ExtraDetailsSchema)
+
+

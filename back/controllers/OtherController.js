@@ -1,5 +1,6 @@
 const Product = require('../models/ProductSchema')
-const ExtraDetail = require('../models/ExtraDetails')
+const ExtraDetail = require('../models/ExtraDetailsSchema')
+
 // product and products are diff thing ***
 
 const Products = async(req,res) => {
@@ -25,4 +26,6 @@ const ExtraDetails = async(req,res) =>{
 
 }
 
-module.exports = {Products , ExtraDetails}
+
+
+module.exports = {Products , ExtraDetails }

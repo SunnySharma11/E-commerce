@@ -6,7 +6,7 @@ import Shop from "./pages/Shop";
 import Contact from "./pages/Contact";
 import Home from "./pages/Home";
 import About from "./pages/About";
-import Features from "./pages/Features";
+import Cart from "./pages/Cart";
 import Login from './pages/Login'
 import Register from './pages/Register'
 import QuickView from './pages/QuickView'
@@ -21,7 +21,7 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/shop" element={<Shop />} />
-        <Route path="/cart" element={<Features />} />
+        <Route path="/cart" element={<Cart />} />
         <Route path="/about" element={<About />} />
         <Route path="/quick-view/:id" element = {<QuickView  />} />
       </Routes>
