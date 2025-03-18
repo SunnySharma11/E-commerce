@@ -11,6 +11,9 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import QuickView from './pages/QuickView'
 
+import PaymentSuccess from "./pages/PaymentSuccess"
+
+
 const App = () => {
   return (
     <BrowserRouter>
@@ -24,6 +27,8 @@ const App = () => {
         <Route path="/cart" element={<Cart />} />
         <Route path="/about" element={<About />} />
         <Route path="/quick-view/:id" element = {<QuickView  />} />
+        
+        <Route path="/payment-success" element={<PaymentSuccess />} />
       </Routes>
     </BrowserRouter>
   );

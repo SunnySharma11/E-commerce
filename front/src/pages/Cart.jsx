@@ -1,12 +1,16 @@
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import { toast } from "react-toastify";
+import { useHelper } from "../helper/Help";
 
 const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
   const [quantities, setQuantities] = useState({});
 
-  useEffect(() => {
+  const {handlePaymentAndRedirect} = useHelper();
+   
+
+   useEffect(() => {
     const loadItems = async () => {
       try {
         const response = await fetch("http://localhost:5000/cart", {
@@ -65,9 +69,9 @@ const Cart = () => {
   
 
   const handleQuantityChange = (id, value) => {
-    setQuantities({ ...quantities, [_id]: Math.max(1, value) });
+    setQuantities({ ...quantities, [id]: Math.max(1, value) });
   };
-
+  
   const totalPrice = cartItems
     .reduce((total, item) => total + item.price * quantities[item._id], 0)
     .toFixed(2);
@@ -137,9 +141,10 @@ const Cart = () => {
         </table>
         <div className="tw:mt-4 tw:flex tw:justify-between tw:items-center">
           <h5 className="tw:text-lg">Total: ${totalPrice}</h5>
-          <button className="tw:bg-blue-500 tw:text-white tw:px-4 tw:py-2 tw:rounded">
-            Click to Pay
+          <button className="tw:bg-blue-500 tw:text-white tw:px-4 tw:py-2 tw:rounded" onClick={() => handlePaymentAndRedirect(totalPrice)}>
+            Click to Pay this is a btn
           </button>
+          
         </div>
       </div>
     </div>

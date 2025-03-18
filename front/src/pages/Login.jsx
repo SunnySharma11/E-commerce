@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contextApi/AuthContext";
 import { toast } from "react-toastify";
+import Navbar from '../components/Navbar'
 
 const Login = () => {
   const [user, setUser] = useState({
