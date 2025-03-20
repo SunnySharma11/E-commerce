@@ -43,11 +43,6 @@ const Navbar = () => {
               Register
             </NavLink>
           </li>
-          <li className="tw:mt-1.5 tw:ml-1">
-            <NavLink to="/payment" className="tw:text-lg">
-              Payment
-            </NavLink>
-          </li>
         </ul>
       </div>
       <div>

@@ -2,7 +2,7 @@ import React from "react";
 import "./HomeMidCss.css";
 import { useNavigate } from "react-router-dom";
 
-const products = [
+const products = [        // yahi par sahi hai , home me types of chize ka hi rakhenge bas
   {
     id: 1,
     name: "Women",

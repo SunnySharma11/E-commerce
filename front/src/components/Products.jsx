@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import './HomeMidCss.css'
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Products = () => {
   const [allProducts, setAllProducts] = useState([]);
@@ -16,11 +17,8 @@ const Products = () => {
   useEffect(() => {
     const fetchAllProducts = async () => {
       try {
-        const response = await fetch("http://localhost:5000/products");
-        if (!response.ok) throw new Error("Failed to fetch products");
-
-        const data = await response.json();
-        setAllProducts(data);
+        const response = await axios.get("http://localhost:5000/products");
+        setAllProducts(response.data);
       } catch (error) {
         toast.error("Error fetching data");
       }

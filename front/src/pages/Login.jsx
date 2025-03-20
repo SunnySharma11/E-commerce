@@ -27,26 +27,17 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:5000/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(user),
-      });
-
-      const data = await response.json();
-      console.log("response is ", data);
-
-      if (response.ok) {
-        toast.success("Login successful!");
-        storeTokenInLS(data.token);
-        setUser({ email: "", password: "" });
-        navigate("/");
-      } else {
-        toast.error(data.extraDetails || "Login failed");
-      }
+      const { data } = await axios.post("http://localhost:5000/login", user);
+    
+      toast.success("Login successful!");
+      storeTokenInLS(data.token);
+      setUser({ email: "", password: "" });
+      navigate("/");
     } catch (error) {
-      toast.error("Error during login. Please try again.");
+      toast.error(error.response?.data?.extraDetails || "Login failed");
+      console.error("Login error:", error);
     }
+    
   };
 
   return (

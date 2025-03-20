@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { FaHeart, FaFacebookF, FaTwitter, FaGoogle, FaTimes, FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { toast } from "react-toastify";
+import axios from 'axios'
 
 export default function QuickView() {
   const navigate = useNavigate();
@@ -17,16 +18,13 @@ const [selectedSize, setSelectedSize] = useState(""); // Selected size
   useEffect(() => {
     const fetchDetails = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/quick-view/${id}`);
-        if (response.ok) {
-          const data = await response.json();
-          setDetails(data);
-        } else {
-          toast.error("Failed to fetch details");
-        }
+        const { data } = await axios.get(`http://localhost:5000/quick-view/${id}`);
+        setDetails(data);
       } catch (error) {
-        toast.error("Error during details fetch");
+        toast.error("Error fetching details");
+        console.error("Details fetch error:", error);
       }
+      
     };
 
     if (id) {
@@ -59,32 +57,23 @@ const [selectedSize, setSelectedSize] = useState(""); // Selected size
     
 
 
-  try{
-    const response = await fetch("http://localhost:5000/cart/add", {  
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
+    try {
+      const { data } = await axios.post("http://localhost:5000/cart/add", {
         name: details.name,
         price: parseFloat(details.price.replace(/[^0-9.]/g, "")), // Convert price to a number
         imgSrc: details.imgSrc[0],
         color: selectedColor,
         size: selectedSize,
         quant: quantity,
-      }),
-    });
+      });
     
-    const responseData = await response.json();
-    
-    if (response.ok) {
       toast.success("Added to cart!");
       navigate("/cart");
-    } else {
-      toast.error(`Failed to add to cart: ${responseData.error || "Unknown error"}`);
+    } catch (error) {
+      toast.error(`Failed to add to cart: ${error.response?.data?.error || "Unknown error"}`);
+      console.error("Cart add error:", error);
     }
     
-    } catch (error) {
-      toast.error("Error adding to cart.");
-    }
   };
 
 

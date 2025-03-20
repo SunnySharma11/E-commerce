@@ -2,76 +2,54 @@ import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import { toast } from "react-toastify";
 import { useHelper } from "../helper/Help";
+import axios from "axios";
 
 const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
   const [quantities, setQuantities] = useState({});
 
-  const {handlePaymentAndRedirect} = useHelper();
-   
+  const { handlePaymentAndRedirect } = useHelper();
 
-   useEffect(() => {
+  useEffect(() => {
     const loadItems = async () => {
       try {
-        const response = await fetch("http://localhost:5000/cart", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          setCartItems(data);
-          setQuantities(
-            data.reduce((acc, item) => ({ ...acc, [item._id]: 1 }), {})
-          );
-        } else {
-          toast.error("Failed to fetch cart");
-        }
+        const { data } = await axios.get("http://localhost:5000/cart");
+        setCartItems(data);
+        setQuantities(
+          data.reduce((acc, item) => ({ ...acc, [item._id]: 1 }), {})
+        );
       } catch (error) {
-        toast.error("Error during cart fetch");
+        toast.error("Error fetching cart");
+        console.error("Cart fetch error:", error);
       }
+      
     };
     loadItems();
   }, []);
 
   const removeItem = async (_id) => {
-  
     try {
-      const response = await fetch(`http://localhost:5000/cart/${_id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-  
-      const data = await response.json(); 
+      const { data } = await axios.delete(`http://localhost:5000/cart/${_id}`);
     
-  
-      if (response.ok) {
-        setCartItems(cartItems.filter((item) => item._id !== _id));
-        setQuantities((prev) => {
-          const newQuantities = { ...prev };
-          delete newQuantities[_id];
-          return newQuantities;
-        });
-        toast.success("Item removed");
-      } else {
-        toast.error(data.error || "Failed to remove item");
-      }
+      setCartItems(cartItems.filter((item) => item._id !== _id));
+      setQuantities((prev) => {
+        const newQuantities = { ...prev };
+        delete newQuantities[_id];
+        return newQuantities;
+      });
+    
+      toast.success("Item removed");
     } catch (error) {
-      
-      toast.error("Error removing item");
+      toast.error(error.response?.data?.error || "Error removing item");
+      console.error("Item removal error:", error);
     }
+    
   };
-  
-  
 
   const handleQuantityChange = (id, value) => {
     setQuantities({ ...quantities, [id]: Math.max(1, value) });
   };
-  
+
   const totalPrice = cartItems
     .reduce((total, item) => total + item.price * quantities[item._id], 0)
     .toFixed(2);
@@ -141,10 +119,12 @@ const Cart = () => {
         </table>
         <div className="tw:mt-4 tw:flex tw:justify-between tw:items-center">
           <h5 className="tw:text-lg">Total: ${totalPrice}</h5>
-          <button className="tw:bg-blue-500 tw:text-white tw:px-4 tw:py-2 tw:rounded" onClick={() => handlePaymentAndRedirect(totalPrice)}>
-            Click to Pay this is a btn
+          <button
+            className="tw:bg-blue-500 tw:text-white tw:px-4 tw:py-2 tw:rounded"
+            onClick={() => handlePaymentAndRedirect(totalPrice)}
+          >
+            Click to Pay
           </button>
-          
         </div>
       </div>
     </div>

@@ -15,7 +15,7 @@ const PaymentSuccess = () => {
             <p><strong>Order ID:</strong> {response?.razorpay_order_id}</p>
             <p><strong>Amount:</strong> ₹{amount / 100}</p>
         </div>
-        <button onClick={ () =>navigate("/")}>go back </button>
+        <button className="tw:button" onClick={ () =>navigate("/")}>go back </button>
         </>
     );
 };

@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import axios from "axios";
 
 export const AuthContext = createContext();
 
@@ -24,7 +25,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("token");
   };
 
-  // Fetch user details
+  // Fetch user details  ,but not need for now , i will use it in contacts to get email from db of user
   const userAuthentication = async () => {
     if (!token) {
       setLoading(false);
@@ -32,20 +33,17 @@ export const AuthProvider = ({ children }) => {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/user", {
-        method: "GET",
+      const response = await axios.get("http://localhost:5000/user", {
         headers: { Authorization: authToken },
       });
-
-      if (response.ok) {
-        const userData = await response.json();
-        setUser(userData);
-      }
+    
+      setUser(response.data);
     } catch (error) {
       console.error("Error fetching user data:", error);
     } finally {
       setLoading(false);
     }
+    
   };
 
   useEffect(() => {

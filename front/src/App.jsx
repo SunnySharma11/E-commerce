@@ -12,6 +12,7 @@ import Register from './pages/Register'
 import QuickView from './pages/QuickView'
 
 import PaymentSuccess from "./pages/PaymentSuccess"
+import Footer from "./components/Footer";
 
 
 const App = () => {
@@ -30,6 +31,7 @@ const App = () => {
         
         <Route path="/payment-success" element={<PaymentSuccess />} />
       </Routes>
+      <Footer />
     </BrowserRouter>
   );
 };
