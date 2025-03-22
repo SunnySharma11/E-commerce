@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar";
 import { toast } from "react-toastify";
 import { useHelper } from "../helper/Help";
 import axios from "axios";
+import Footer from "../components/Footer";
 
 const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -55,11 +56,11 @@ const Cart = () => {
     .toFixed(2);
 
   return (
-    <div>
+    <div className="tw:flex tw:flex-col tw:min-h-screen">
       <div className="tw:pl-43 tw:pr-45 tw:border">
         <Navbar />
       </div>
-      <div className="tw:pl-43 tw:pr-45">
+      <div className="tw:pl-43 tw:pr-45 tw:flex-1">
         <h5>Cart</h5>
         <table className="table">
           <thead>
@@ -127,6 +128,7 @@ const Cart = () => {
           </button>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };
