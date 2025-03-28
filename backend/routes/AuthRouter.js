@@ -1,13 +1,12 @@
 const router = require("express").Router();
 const allControllers = require("../controllers/AuthController");
-const Validate = require('../middleware/Validate')
-const allValidator = require('../Validator/ZodSchema')
+const Validate = require("../middleware/ZodValidator.js")          // somethime need for .js
 const otherControllers = require("../controllers/OtherController")
 const cartControllers = require("../controllers/CartController");
 
 
-router.route('/register').post(Validate(allValidator.registerValidator),allControllers.register)
-router.route('/login').post(Validate(allValidator.loginValidator),allControllers.login)
+router.route('/register').post(Validate.signupValidation,allControllers.Register)
+router.route('/login').post(Validate.loginValidation,allControllers.Login)
 router.route('/products').get(otherControllers.Products)
 router.route('/quick-view/:id').get(otherControllers.ExtraDetails)
 router.route('/cart').get(cartControllers.CartItems)

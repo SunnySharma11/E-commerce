@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { FaHeart, FaFacebookF, FaTwitter, FaGoogle, FaTimes, FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { toast } from "react-toastify";
-import axios from 'axios'
+import axios from 'axios';
 
 export default function QuickView() {
   const navigate = useNavigate();

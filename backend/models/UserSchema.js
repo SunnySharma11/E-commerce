@@ -3,18 +3,19 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const UserSchema = new mongoose.Schema({
-  //register and login both on same schema
-  username: {
+  name: {
     type: String,
     required: true,
   },
   email: {
     type: String,
     required: true,
+    unique: true,
   },
   password: {
     type: String,
     required: true,
+    unique: true,
   },
   isAdmin: {
     // you can directly add adefault thing,but you need to delete whole old things in mongo and then again create datas
@@ -23,25 +24,17 @@ const UserSchema = new mongoose.Schema({
   },
 });
 
-UserSchema.pre('save', async function (){        //this will play the game here
-  const user = this;              // by reference going things
+UserSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
+    
+    try {
+        const salt = await bcrypt.genSalt(10);
+        this.password = await bcrypt.hash(this.password, salt);
+        next();
+    } catch (err) {
+        next(err);
+    }
+});
 
-  const saltRound = await bcrypt.genSalt(10)
-  const hashedPass = await bcrypt.hash(user.password,saltRound)
-
-  user.password = hashedPass    // refernce going
-})
-
-
-UserSchema.methods.createToken = async function () {        //give only necessary data
-  return await jwt.sign({
-      username:this.username,
-      email:this.email,
-      userId:this._id.toString()
-  },
-  process.env.JWT_SECRET_KEY,
-  {expiresIn:'2d'}
-  )
-}
 
 module.exports = new mongoose.model("User", UserSchema);

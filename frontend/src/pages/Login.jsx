@@ -2,33 +2,25 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contextApi/AuthContext";
 import { toast } from "react-toastify";
-import Navbar from '../components/Navbar'
+import Navbar from '../components/Navbar';
+import axios from "axios";
 
 const Login = () => {
-  const [user, setUser] = useState({
-    email: "",
-    password: "",
-  });
-
+  const [user, setUser] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const { storeTokenInLS } = useAuth();
 
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
+  const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
   const inputHandler = (e) => {
-    const { name, value } = e.target;
-    setUser({ ...user, [name]: value });
+    setUser({ ...user, [e.target.name]: e.target.value });
   };
 
   const submitHandler = async (e) => {
     e.preventDefault();
-
     try {
       const { data } = await axios.post("http://localhost:5000/login", user);
-    
       toast.success("Login successful!");
       storeTokenInLS(data.token);
       setUser({ email: "", password: "" });
@@ -37,7 +29,6 @@ const Login = () => {
       toast.error(error.response?.data?.extraDetails || "Login failed");
       console.error("Login error:", error);
     }
-    
   };
 
   return (

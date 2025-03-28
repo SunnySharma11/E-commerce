@@ -3,64 +3,40 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contextApi/AuthContext';
 import { toast } from "react-toastify";
 import Navbar from '../components/Navbar';
+import axios from "axios";
 
 const Register = () => {
   const { storeTokenInLS } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
+  const [user, setUser] = useState({ name: "", email: "", password: "" });
 
-  const [user, setUser] = useState({
-    username: '',
-    email: '',
-    password: ''
-  });
-
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-
+  const togglePasswordVisibility = () => setShowPassword(!showPassword);
   const navigate = useNavigate();
 
   const inputHandler = (e) => {
-    const name = e.target.name;
-    const value = e.target.value;
-
-    setUser({
-      ...user,
-      [name]: value
-    });
+    setUser({ ...user, [e.target.name]: e.target.value });
   };
 
   const submitHandler = async (e) => {
     e.preventDefault();
-
     try {
-      const response = await fetch('http://localhost:5000/register', {
-        method: 'POST',
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(user)
+      const { data } = await axios.post("http://localhost:5000/register", user, {
+        headers: { "Content-Type": "application/json" },
       });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        toast.success("Registration successful! 🎉");
-        storeTokenInLS(data.token);
-
-        setUser({
-          username: '', email: '', password: ''
-        });
-        navigate('/');
-      } else {
-        toast.error(data.extraDetails || "Something went wrong! ❌");
-      }
-
+  
+      console.log("Response Data:", data);
+  
+      toast.success("Registration successful! 🎉");
+      storeTokenInLS(data.token);
+      setUser({ name: "", email: "", password: "" });
+  
+      navigate("/");
     } catch (error) {
-      console.log('error during fetch', error);
-      toast.error("Network error! Please try again. ❌");
+      console.error("Error during fetch", error);
+      toast.error(error.response?.data?.extraDetails || "Something went wrong! ❌");
     }
-  }
+  };
+  
   return (
     <>
       <div className="tw:ml-43 tw:mr-45">
@@ -71,16 +47,16 @@ const Register = () => {
           <h2 className="text-center mb-4">Register</h2>
           <form onSubmit={submitHandler}>
             <div className="mb-3">
-              <label htmlFor="username" className="form-label">
+              <label htmlFor="name" className="form-label">
                 Username
               </label>
               <input
                 type="text"
-                id="username"
-                name="username"
+                id="name"
+                name="name"
                 className="form-control"
                 required
-                value={user.username}
+                value={user.name}
                 onChange={inputHandler}
               />
             </div>

@@ -4,17 +4,28 @@ import { toast } from "react-toastify";
 import { useHelper } from "../helper/Help";
 import axios from "axios";
 import Footer from "../components/Footer";
+import { useAuth } from "../contextApi/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
   const [quantities, setQuantities] = useState({});
-
+  const navigate = useNavigate();
+  const { isLoggedIn, authToken } = useAuth();
   const { handlePaymentAndRedirect } = useHelper();
 
   useEffect(() => {
+    if (!isLoggedIn) {
+      navigate("/login");
+      return;
+    }
+
     const loadItems = async () => {
       try {
-        const { data } = await axios.get("http://localhost:5000/cart");
+        const { data } = await axios.get("http://localhost:5000/cart", {
+          headers: { Authorization: authToken },
+          withCredentials: true,
+        });
         setCartItems(data);
         setQuantities(
           data.reduce((acc, item) => ({ ...acc, [item._id]: 1 }), {})
@@ -23,10 +34,10 @@ const Cart = () => {
         toast.error("Error fetching cart");
         console.error("Cart fetch error:", error);
       }
-      
     };
+
     loadItems();
-  }, []);
+  }, [isLoggedIn, authToken, navigate]);
 
   const removeItem = async (_id) => {
     try {
