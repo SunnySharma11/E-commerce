@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const allControllers = require("../controllers/AuthController");
-const Validate = require("../middleware/ZodValidator.js")          // somethime need for .js
+const Validate = require("../middleware/ZodValidator")          // somethime need for .js
 const otherControllers = require("../controllers/OtherController")
 const cartControllers = require("../controllers/CartController");
 
